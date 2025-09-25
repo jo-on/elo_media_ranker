@@ -28,11 +28,12 @@ Placement matchup:
 > 
 ```
 etc.
+
 ---
 ### **Example graphs:**
 
-![ELO vs Letterboxd score](elo_lb.png)
-![ELO vs years](elo_time.png)
+![ELO vs Letterboxd score](md_imgs/elo_lb.png)
+![ELO vs years](md_imgs/elo_time.png)
 ---
 ### **Setup**
 Requires `Python 3.x` and the following packages:

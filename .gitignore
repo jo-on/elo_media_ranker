@@ -1,2 +1,2 @@
 main.csv
-/pycache/*
+__pycache__/
