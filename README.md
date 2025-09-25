@@ -10,8 +10,8 @@ ELO Media Ranker uses the ELO rating system, a method for ranking players in gam
 ---
 ### **Example usage:**
 ```
-[1]: Add a new movie
-[2]: Decide between existing movies
+[1]: Add a new item
+[2]: Decide between existing items
 [3]: Choose own matchup by indexes
 [0]: Quit
 > 1
