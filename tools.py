@@ -1,9 +1,6 @@
 import pandas as pd
 import random
-
-
-GENERAL_SCORER = "Letterboxd"
-GENERAL_SCORER_SCALE = [0, 5] # 0-5 stars
+from variables import GENERAL_SCORER, GENERAL_SCORE_SCALE
 
 
 def expected_value(rA, rB):
@@ -15,12 +12,12 @@ def new_elo(rA, result, ev, k=32):
     return int(rA + k * (scores[int(result)] - ev))
 
 
-def add_movie(df: pd.DataFrame, csv: str, base_rating: int=1000):
-    A_n = input("\nMovie name: ")
+def add_item(df: pd.DataFrame, csv: str, base_rating: int=1000):
+    A_n = input("Item name:\n> ")
     A_i = len(df)
     A_s = base_rating
 
-    A_y = input(f"Release year of {A_n}: ")
+    A_y = input(f"Release year of {A_n}:\n> ")
     while True:
         try:
             A_y = int(A_y)
@@ -30,11 +27,11 @@ def add_movie(df: pd.DataFrame, csv: str, base_rating: int=1000):
         except:
             A_y = input("Invalid input.\n> ")
 
-    A_l = input(f"{GENERAL_SCORER} rating for {A_n}: ")
+    A_l = input(f"{GENERAL_SCORER} rating for {A_n}:\n> ")
     while True:
         try:
             A_l = float(A_l)
-            if (GENERAL_SCORER_SCALE[0] > A_l) or (A_l > GENERAL_SCORER_SCALE[1]):
+            if (GENERAL_SCORE_SCALE[0] > A_l) or (A_l > GENERAL_SCORE_SCALE[1]):
                 raise ValueError
             break
         except:
@@ -112,9 +109,9 @@ def play(df: pd.DataFrame, csv: str):
 
 
 def set_match(df: pd.DataFrame, csv: str):
-    """ Play a match between two movies chosen by their index
+    """ Play a match between two items chosen by their index
     """
-    A_i = input("CSV index of first movie:\n>")
+    A_i = input("CSV index of first item:\n>")
     while True:
         try:
             A_i = int(A_i)
@@ -124,7 +121,7 @@ def set_match(df: pd.DataFrame, csv: str):
         except:
             A_i = input("Invalid input.\n> ")
 
-    B_i = input("CSV index of second movie:\n>")
+    B_i = input("CSV index of second item:\n>")
     while True:
         try:
             B_i = int(B_i)
