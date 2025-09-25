@@ -1,0 +1,162 @@
+import pandas as pd
+import random
+
+
+GENERAL_SCORER = "Letterboxd"
+GENERAL_SCORER_SCALE = [0, 5] # 0-5 stars
+
+
+def expected_value(rA, rB):
+    return 1 / (1 + 10 ** ((rB - rA) / 400))
+
+
+def new_elo(rA, result, ev, k=32):
+    scores = [0.5, 1, 0]
+    return int(rA + k * (scores[int(result)] - ev))
+
+
+def add_movie(df: pd.DataFrame, csv: str, base_rating: int=1000):
+    A_n = input("\nMovie name: ")
+    A_i = len(df)
+    A_s = base_rating
+
+    A_y = input(f"Release year of {A_n}: ")
+    while True:
+        try:
+            A_y = int(A_y)
+            if (1878 > A_y) or (A_y > 2025): # TODO: Keep updated
+                raise ValueError
+            break
+        except:
+            A_y = input("Invalid input.\n> ")
+
+    A_l = input(f"{GENERAL_SCORER} rating for {A_n}: ")
+    while True:
+        try:
+            A_l = float(A_l)
+            if (GENERAL_SCORER_SCALE[0] > A_l) or (A_l > GENERAL_SCORER_SCALE[1]):
+                raise ValueError
+            break
+        except:
+            A_l = input("Invalid input.\n> ")
+
+    inds = list(range(len(df)))
+    random.shuffle(inds)
+    for _ in range(min(len(df), 5)):
+        random_index = inds.pop()
+
+        B_n = df.iloc[random_index, 0]
+        B_s = df.iloc[random_index, 1]
+        B_l = df.iloc[random_index, 2]
+        B_y = df.iloc[random_index, 3]
+
+        A_ev = expected_value(A_s, B_s)
+        B_ev = expected_value(B_s, A_s)
+
+        resA = input(f"Placement matchup:\n[1]: {A_n} < {round(A_ev, 2)} >\n[2]: {B_n} < {round(B_ev, 2)} >\n[0]: Tie\n> ")
+        while True:
+            if resA == '0':
+                resB = 0
+                break
+            elif resA == '1':
+                resB = 2
+                break
+            elif resA == '2':
+                resB = 1
+                break
+            else:
+                resA = input("Invalid input.\n> ")
+
+        A_s = new_elo(A_s, int(resA), A_ev)
+
+        df.loc[random_index] = [B_n, (new_elo(B_s, resB, B_ev)), B_l, B_y]
+
+    df.loc[A_i] = [A_n, A_s, A_l, A_y]
+    df.to_csv(csv)
+
+
+def play(df: pd.DataFrame, csv: str):
+    inds = list(range(len(df)))
+    random.shuffle(inds)
+    
+    while (len(inds) >= 2):
+        A_i, B_i = inds.pop(), inds.pop()
+        A_n, B_n = df.iloc[A_i, 0], df.iloc[B_i, 0]
+        A_s, B_s = df.iloc[A_i, 1], df.iloc[B_i, 1]
+        A_l, B_l = df.iloc[A_i, 2], df.iloc[B_i, 2]
+        A_y, B_y = df.iloc[A_i, 3], df.iloc[B_i, 3]
+
+        A_ev = expected_value(A_s, B_s)
+        B_ev = expected_value(B_s, A_s)
+
+        resA = input(f"\nPlacement matchup:\n[1]: {A_n} < {round(A_ev, 2)} >\n[2]: {B_n} < {round(B_ev, 2)} >\n[0]: Tie\n[q]: Quit\n> ")
+        while True:
+            if resA == '0':
+                resB = 0
+                break
+            elif resA == '1':
+                resB = 2
+                break
+            elif resA == '2':
+                resB = 1
+                break
+            elif resA == 'q':
+                return
+            else:
+                resA = input("Invalid input.\n> ")
+
+        df.loc[A_i] = [A_n, new_elo(A_s, int(resA), A_ev), A_l, A_y]
+        df.loc[B_i] = [B_n, new_elo(B_s, resB, B_ev), B_l, B_y]
+
+        df.to_csv(csv)
+
+
+def set_match(df: pd.DataFrame, csv: str):
+    """ Play a match between two movies chosen by their index
+    """
+    A_i = input("CSV index of first movie:\n>")
+    while True:
+        try:
+            A_i = int(A_i)
+            if (0 > A_i) or (A_i >= len(df)):
+                raise ValueError
+            break
+        except:
+            A_i = input("Invalid input.\n> ")
+
+    B_i = input("CSV index of second movie:\n>")
+    while True:
+        try:
+            B_i = int(B_i)
+            if (0 > B_i) or (B_i >= len(df)):
+                raise ValueError
+            break
+        except:
+            B_i = input("Invalid input.\n> ")
+
+    A_n, B_n = df.iloc[A_i, 0], df.iloc[B_i, 0]
+    A_s, B_s = df.iloc[A_i, 1], df.iloc[B_i, 1]
+    A_l, B_l = df.iloc[A_i, 2], df.iloc[B_i, 2]
+    A_y, B_y = df.iloc[A_i, 3], df.iloc[B_i, 3]
+
+    A_ev = expected_value(A_s, B_s)
+    B_ev = expected_value(B_s, A_s)
+
+    resA = input(f"\nPlacement matchup:\n[1]: {A_n} < {round(A_ev, 2)} >\n[2]: {B_n} < {round(B_ev, 2)} >\n[0]: Tie\n> ")
+    while True:
+        if resA == '0':
+            resB = 0
+            break
+        elif resA == '1':
+            resB = 2
+            break
+        elif resA == '2':
+            resB = 1
+            break
+        else:
+            resA = input("Invalid input.\n> ")
+
+    df.loc[A_i] = [A_n, new_elo(A_s, int(resA), A_ev), A_l, A_y]
+    df.loc[B_i] = [B_n, new_elo(B_s, resB, B_ev), B_l, B_y]
+
+    df.to_csv(csv)
