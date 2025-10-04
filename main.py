@@ -11,19 +11,21 @@ except FileNotFoundError:
 
 
 def start():
-    res = input(f"[1]: Add a new item\n[2]: Decide between existing items\n[3]: Choose own matchup by indexes\n[0]: Quit\n> ")
+    res = input(f"[1]: Add a new item\n[2]: Decide between existing items\n[3]: Choose own matchup by indexes\n[4]: Ranked mode\n[q]: Quit\n> ")
     while True:
-        if res == '0':
-            return
+        if res == 'q':
+            break
         elif res == '1':
             add_item(df, CSV)
         elif res == '2':
             play(df, CSV)
         elif res == '3':
             set_match(df, CSV)
+        elif res == '4':
+            play(df, CSV, True)
         else:
             res = input("Invalid input.\n> ")
-        res = input(f"[1]: Add a new item\n[2]: Decide between existing items\n[3]: Choose own matchup by indexes\n[0]: Quit\n> ")
+        res = input(f"\n[1]: Add a new item\n[2]: Decide between existing items\n[3]: Choose own matchup by indexes\n[4]: Ranked mode\n[q]: Quit\n> ")
 
 
 if __name__ == "__main__":

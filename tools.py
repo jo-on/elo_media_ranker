@@ -72,9 +72,16 @@ def add_item(df: pd.DataFrame, csv: str, base_rating: int=1000):
     df.to_csv(csv)
 
 
-def play(df: pd.DataFrame, csv: str):
-    inds = list(range(len(df)))
-    random.shuffle(inds)
+def play(df: pd.DataFrame, csv: str, ranked=False):
+    if ranked:
+        sorted_inds = df.sort_values("ELO", ascending=False).index.to_list()
+
+        pairs = list(zip(sorted_inds[::2], sorted_inds[1::2]))
+        random.shuffle(pairs)
+        inds = [x for pair in pairs for x in pair]
+    else:
+        inds = list(range(len(df)))
+        random.shuffle(inds)
     
     while (len(inds) >= 2):
         A_i, B_i = inds.pop(), inds.pop()
