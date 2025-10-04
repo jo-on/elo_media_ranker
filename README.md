@@ -13,6 +13,7 @@ ELO Media Ranker uses the ELO rating system, a method for ranking players in gam
 [1]: Add a new item
 [2]: Decide between existing items
 [3]: Choose own matchup by indexes
+[4]: Ranked mode
 [0]: Quit
 > 1
 Item name:
