@@ -11,7 +11,7 @@ except FileNotFoundError:
 
 
 def start():
-    res = input(f"[1]: Add a new item\n[2]: Decide between existing items\n[3]: Choose own matchup by indexes\n[4]: Ranked mode\n[q]: Quit\n> ")
+    res = input(f"[1]: Add a new item\n[2]: Play matchups\n[3]: Choose matchup by csv indexes\n[4]: Play ranked matchups\n[q]: Quit\n> ")
     while True:
         if res == 'q':
             break
@@ -25,7 +25,7 @@ def start():
             play(df, CSV, True)
         else:
             res = input("Invalid input.\n> ")
-        res = input(f"\n[1]: Add a new item\n[2]: Decide between existing items\n[3]: Choose own matchup by indexes\n[4]: Ranked mode\n[q]: Quit\n> ")
+        res = input(f"\n[1]: Add a new item\n[2]: Play matchups\n[3]: Choose matchup by csv indexes\n[4]: Play ranked matchups\n[q]: Quit\n> ")
 
 
 if __name__ == "__main__":

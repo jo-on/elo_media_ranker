@@ -27,7 +27,7 @@ def add_item(df: pd.DataFrame, csv: str, base_rating: int=1000):
         except:
             A_y = input("Invalid input.\n> ")
 
-    A_l = input(f"{GENERAL_SCORER} rating for {A_n}:\n> ")
+    A_l = input(f"{GENERAL_SCORER} rating for {A_n} ({A_y}):\n> ")
     while True:
         try:
             A_l = float(A_l)
@@ -50,7 +50,7 @@ def add_item(df: pd.DataFrame, csv: str, base_rating: int=1000):
         A_ev = expected_value(A_s, B_s)
         B_ev = expected_value(B_s, A_s)
 
-        resA = input(f"Placement matchup:\n[1]: {A_n} < {round(A_ev, 2)} >\n[2]: {B_n} < {round(B_ev, 2)} >\n[0]: Tie\n> ")
+        resA = input(f"Placement matchup:\n[1]: {A_n} ({A_y}) - [{round(A_ev, 2)}]\n[2]: {B_n} ({B_y}) - [{round(B_ev, 2)}]\n[0]: Tie\n> ")
         while True:
             if resA == '0':
                 resB = 0
@@ -93,7 +93,7 @@ def play(df: pd.DataFrame, csv: str, ranked=False):
         A_ev = expected_value(A_s, B_s)
         B_ev = expected_value(B_s, A_s)
 
-        resA = input(f"\nPlacement matchup:\n[1]: {A_n} < {round(A_ev, 2)} >\n[2]: {B_n} < {round(B_ev, 2)} >\n[0]: Tie\n[q]: Quit\n> ")
+        resA = input(f"\nPlacement matchup:\n[1]: {A_n} ({A_y}) - [{round(A_ev, 2)}]\n[2]: {B_n} ({B_y}) - [{round(B_ev, 2)}]\n[0]: Tie\n[q]: Quit\n> ")
         while True:
             if resA == '0':
                 resB = 0
@@ -146,7 +146,7 @@ def set_match(df: pd.DataFrame, csv: str):
     A_ev = expected_value(A_s, B_s)
     B_ev = expected_value(B_s, A_s)
 
-    resA = input(f"\nPlacement matchup:\n[1]: {A_n} < {round(A_ev, 2)} >\n[2]: {B_n} < {round(B_ev, 2)} >\n[0]: Tie\n> ")
+    resA = input(f"\nPlacement matchup:\n[1]: {A_n} ({A_y}) - [{round(A_ev, 2)}] >\n[2]: {B_n} ({B_y}) - [{round(B_ev, 2)}]\n[0]: Tie\n> ")
     while True:
         if resA == '0':
             resB = 0
