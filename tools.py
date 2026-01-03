@@ -71,6 +71,9 @@ def add_item(df: pd.DataFrame, csv: str, base_rating: int=1000):
     df.loc[A_i] = [A_n, A_s, A_l, A_y]
     df.to_csv(csv)
 
+    df_sorted = df.sort_values("ELO", ascending=False).reset_index(drop=True)
+    print(f"ELO for {A_n}: {A_s}, rank: {df_sorted[(df_sorted["Name"] == A_n) & (df_sorted["Year"] == A_y)].index[0] + 1}/{len(df)}")
+
 
 def play(df: pd.DataFrame, csv: str, ranked=False):
     if ranked:
